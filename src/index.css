@@ -1,0 +1,361 @@
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/700.css";
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/700.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hacker Theme Design System */
+@layer base {
+  :root {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 55%;
+
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 95%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 40%;
+
+    --radius: 0.25rem;
+
+    /* Custom hacker theme tokens */
+    --terminal-green: 120 100% 50%;
+    --glow-white: 0 0% 100%;
+    --noise-opacity: 0.03;
+    --scanline-opacity: 0.02;
+
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 40%;
+  }
+
+  .dark {
+    --background: 0 0% 2%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 55%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 95%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 0% 40%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 0 0% 15%;
+    --sidebar-ring: 0 0% 40%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-mono;
+    cursor: none;
+  }
+
+  ::selection {
+    @apply bg-foreground text-background;
+  }
+}
+
+@layer components {
+  .noise-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: var(--noise-opacity);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
+
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: var(--scanline-opacity);
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      hsl(var(--foreground) / 0.03) 2px,
+      hsl(var(--foreground) / 0.03) 4px
+    );
+  }
+
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--foreground)) 0%, hsl(var(--muted-foreground)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-text {
+    text-shadow: 0 0 20px hsl(var(--glow-white) / 0.3),
+                 0 0 40px hsl(var(--glow-white) / 0.2),
+                 0 0 60px hsl(var(--glow-white) / 0.1);
+  }
+
+  .glow-border {
+    box-shadow: 0 0 20px hsl(var(--glow-white) / 0.1),
+                inset 0 0 20px hsl(var(--glow-white) / 0.05);
+  }
+
+  .terminal-prompt::before {
+    content: '>';
+    @apply text-muted-foreground mr-2;
+  }
+
+  .glitch-effect {
+    position: relative;
+  }
+
+  .glitch-effect::before,
+  .glitch-effect::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .glitch-effect::before {
+    animation: glitch-1 0.3s infinite linear alternate-reverse;
+    clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+    color: hsl(var(--foreground));
+  }
+
+  .glitch-effect::after {
+    animation: glitch-2 0.3s infinite linear alternate-reverse;
+    clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+    color: hsl(var(--foreground));
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@keyframes glitch-1 {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-2px); }
+  40% { transform: translateX(2px); }
+  60% { transform: translateX(-1px); }
+  80% { transform: translateX(1px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes glitch-2 {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(2px); }
+  40% { transform: translateX(-2px); }
+  60% { transform: translateX(1px); }
+  80% { transform: translateX(-1px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s infinite;
+}
+
+/* ========================================
+   INTRO SEQUENCE STYLES
+   ======================================== */
+
+/* Intro noise overlay - subtle texture */
+.intro-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='introNoiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23introNoiseFilter)'/%3E%3C/svg%3E");
+  animation: noise-flicker 0.1s infinite;
+}
+
+@keyframes noise-flicker {
+  0% { opacity: 0.03; }
+  50% { opacity: 0.05; }
+  100% { opacity: 0.03; }
+}
+
+/* Intro scanlines - elegant horizontal lines */
+.intro-scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.02) 2px,
+    rgba(255, 255, 255, 0.02) 4px
+  );
+  animation: scanline-scroll 8s linear infinite;
+}
+
+@keyframes scanline-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100px; }
+}
+
+/* Glitch text effect for terminal boot log */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.glitch-text::before {
+  animation: glitch-left 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  color: rgba(255, 255, 255, 0.6);
+  z-index: -1;
+}
+
+.glitch-text::after {
+  animation: glitch-right 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  color: rgba(255, 255, 255, 0.3);
+  z-index: -2;
+}
+
+@keyframes glitch-left {
+  0% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  2% {
+    transform: translate(-2px, 1px);
+    opacity: 0.3;
+  }
+  4% {
+    transform: translate(-1px, -1px);
+    opacity: 0.2;
+  }
+  6% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0);
+    opacity: 0;
+  }
+}
+
+@keyframes glitch-right {
+  0% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  3% {
+    transform: translate(2px, -1px);
+    opacity: 0.2;
+  }
+  5% {
+    transform: translate(1px, 1px);
+    opacity: 0.1;
+  }
+  7% {
+    transform: translate(0);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0);
+    opacity: 0;
+  }
+}
+
+/* Flash noise - more aggressive for transition */
+.intro-flash-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='flashNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23flashNoise)'/%3E%3C/svg%3E");
+  mix-blend-mode: overlay;
+  animation: flash-distort 0.25s ease-out;
+}
+
+@keyframes flash-distort {
+  0% { transform: scale(1); filter: blur(0px); }
+  50% { transform: scale(1.05); filter: blur(2px); }
+  100% { transform: scale(1); filter: blur(0px); }
+}
+
+/* Performance optimization for mobile */
+@media (max-width: 768px) {
+  .intro-noise,
+  .intro-flash-noise {
+    display: none;
+  }
+  
+  .glitch-text::before,
+  .glitch-text::after {
+    display: none;
+  }
+  
+  .intro-scanlines {
+    opacity: 0.5;
+  }
+}
+
+/* Ensure intro is above everything */
+.intro-layer {
+  isolation: isolate;
+}
