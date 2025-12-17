@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import Hero3DScene from "./Hero3DScene";
+import EncryptedIdentityDrift from "./EncryptedIdentityDrift";
 
 interface HeroSectionProps {
   introComplete?: boolean;
@@ -91,8 +92,17 @@ const HeroSection = ({ introComplete = true }: HeroSectionProps) => {
             <p className="font-mono text-muted-foreground mb-4">
               <span className="text-foreground/70">{">"}"</span> Hello, I am
             </p>
-            <h1 className="font-display text-5xl sm:text-7xl lg:text-8xl font-bold tracking-tight leading-none glow-text">
-              SHASHANK MAHARIYA
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight glow-text">
+              <div className="flex flex-col gap-1">
+                <EncryptedIdentityDrift 
+                  text="SHASHANK"
+                  introComplete={introComplete}
+                />
+                <EncryptedIdentityDrift 
+                  text="MAHARIYA"
+                  introComplete={introComplete}
+                />
+              </div>
             </h1>
           </motion.div>
 
